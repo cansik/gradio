@@ -189,7 +189,9 @@ class Image(StreamingInput, Component):
         """
         if payload is None:
             return payload
-        if payload.url and payload.url.startswith("data:"):
+        if payload.url:
+            if not payload.url.startswith("data:"):
+                raise ValueError("Image url does not have a valid data URI scheme.")
             if self.type == "pil":
                 return image_utils.decode_base64_to_image(payload.url)
             elif self.type == "numpy":
